@@ -6,10 +6,10 @@
 public sealed class ClerkAuthenticationOptions
 {
     /// <summary>
-    /// Sets the authorized party. This should be the front-end URL if your application.
+    /// Sets the authorized parties. These should be the front-end URLs of your application.
     /// We highly recommend configuring this for improved security.
     /// </summary>
-    public string? AuthorizedParty { get; set; } = null!;
+    public List<string>? AuthorizedParties { get; set; } = null!;
     
     /// <summary>
     /// The Frontend URI of your Clerk instance.
