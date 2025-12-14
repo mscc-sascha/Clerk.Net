@@ -53,6 +53,7 @@ public static class ClerkAuthenticationExtensions
             x.Events = new JwtBearerEvents()
             {
                 // Additional validation for AZP claim
+                // NOTE: Validation will succeed if neither AuthorizedParty nor AuthorizedParties is set
                 OnTokenValidated = context =>
                 {
                     var azp = context.Principal?.FindFirstValue("azp");
@@ -62,6 +63,16 @@ public static class ClerkAuthenticationExtensions
                         context.Fail("AZP Claim is missing");
                     }
 
+                    // OBSOLETE: Check single AuthorizedParty
+                    if (!string.IsNullOrEmpty(optionsObj.AuthorizedParty))
+                    {
+                        if (azp != optionsObj.AuthorizedParty)
+                        {
+                            context.Fail("AZP Claim does not match the authorized party");
+                        }
+                    }
+
+                    // Check multiple AuthorizedParties
                     if (optionsObj.AuthorizedParties != null &&
                         optionsObj.AuthorizedParties.Count > 0)
                     {
